@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useForm, type Resolver } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { X, KeyRound, ChevronDown } from 'lucide-react'
@@ -8,8 +8,8 @@ import { useAuth } from '../../hooks/useAuth'
 
 const esquema = z.object({
   nombre_completo: z.string().min(2, 'Mínimo 2 caracteres'),
-  lada:            z.string().default('+52'),
-  telefono:        z.string().optional().transform(v => v || null),
+  lada:            z.string().min(1).default('+52'),
+  telefono:        z.string().optional(),
   nueva_clave:     z.string().optional(),
   confirmar_clave: z.string().optional(),
 }).refine(d => {
@@ -36,7 +36,7 @@ export function ModalPerfil({ abierto, onCerrar }: Props) {
   const [mostrarClave, setMostrarClave] = useState(false)
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
-    useForm<FormData>({ resolver: zodResolver(esquema) as Resolver<FormData> })
+    useForm<FormData>({ resolver: zodResolver(esquema) })
 
   function parseTelefono(tel: string | null | undefined): { lada: string; numero: string } {
     if (!tel) return { lada: '+52', numero: '' }

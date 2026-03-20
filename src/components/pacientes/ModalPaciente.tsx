@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useForm, Controller, type Resolver } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { X } from 'lucide-react'
@@ -12,17 +12,16 @@ const esquema = z.object({
   // Datos personales
   nombre:               z.string().min(1, 'Requerido'),
   apellido:             z.string().min(1, 'Requerido'),
-  fecha_nacimiento:     z.string().optional().transform(v => v || null),
-  telefono:             z.string().optional().transform(v => v || null),
-  email:                z.union([z.string().email('Email inválido'), z.literal('')])
-                          .optional().transform(v => v || null),
-  direccion:            z.string().optional().transform(v => v || null),
-  recomendado_por:      z.string().optional().transform(v => v || null),
-  ultima_visita_dental: z.string().optional().transform(v => v || null),
+  fecha_nacimiento:     z.string().optional(),
+  telefono:             z.string().optional(),
+  email:                z.string().optional(),
+  direccion:            z.string().optional(),
+  recomendado_por:      z.string().optional(),
+  ultima_visita_dental: z.string().optional(),
   // Anestesia
   anestesia_previa:     z.boolean().default(false),
   reaccion_anestesia:   z.boolean().default(false),
-  tipo_reaccion:        z.string().optional().transform(v => v || null),
+  tipo_reaccion:        z.string().optional(),
   // Condiciones médicas
   condiciones_medicas: z.object({
     cardiaca:            z.boolean().default(false),
@@ -34,7 +33,7 @@ const esquema = z.object({
     respiratorio:        z.boolean().default(false),
     hemofilia:           z.boolean().default(false),
     hemorragias:         z.boolean().default(false),
-    otras:               z.string().optional().transform(v => v || ''),
+    otras:               z.string().optional(),
     alergia_medicamento: z.boolean().default(false),
     embarazada:          z.boolean().default(false),
   }).default({}),
@@ -139,7 +138,7 @@ export function ModalPaciente({ abierto, paciente, onGuardar, onCerrar }: Props)
     watch,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(esquema) as Resolver<FormData> })
+  } = useForm<FormData>({ resolver: zodResolver(esquema) })
 
   const anestesiaPrevia   = watch('anestesia_previa')
   const reaccionAnestesia = watch('reaccion_anestesia')
