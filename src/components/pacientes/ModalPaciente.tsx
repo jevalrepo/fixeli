@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { X } from 'lucide-react'
@@ -138,9 +138,8 @@ export function ModalPaciente({ abierto, paciente, onGuardar, onCerrar }: Props)
     reset,
     watch,
     control,
-    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(esquema) })
+  } = useForm<FormData>({ resolver: zodResolver(esquema) as Resolver<FormData> })
 
   const anestesiaPrevia   = watch('anestesia_previa')
   const reaccionAnestesia = watch('reaccion_anestesia')

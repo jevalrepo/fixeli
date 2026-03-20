@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { X, Trash2 } from 'lucide-react'
@@ -58,7 +58,7 @@ export function ModalCita({ abierto, cita, fechaInicial, horaInicial, pacientes,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(esquema) })
+  } = useForm<FormData>({ resolver: zodResolver(esquema) as Resolver<FormData> })
 
   useEffect(() => {
     if (!abierto) return

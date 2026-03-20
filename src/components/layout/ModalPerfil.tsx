@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, type Resolver } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { X, KeyRound, ChevronDown } from 'lucide-react'
@@ -36,7 +36,7 @@ export function ModalPerfil({ abierto, onCerrar }: Props) {
   const [mostrarClave, setMostrarClave] = useState(false)
 
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
-    useForm<FormData>({ resolver: zodResolver(esquema) })
+    useForm<FormData>({ resolver: zodResolver(esquema) as Resolver<FormData> })
 
   function parseTelefono(tel: string | null | undefined): { lada: string; numero: string } {
     if (!tel) return { lada: '+52', numero: '' }

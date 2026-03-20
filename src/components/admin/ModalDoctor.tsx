@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { X } from 'lucide-react'
-import type { Perfil, Rol } from '../../types/database'
+import type { Perfil } from '../../types/database'
 
 // ─── Colores disponibles ──────────────────────────────────────────────────────
 
@@ -32,9 +32,7 @@ const esquemaCrear = esquemaBase.extend({
 
 const esquemaEditar = esquemaBase
 
-type FormCrear  = z.infer<typeof esquemaCrear>
-type FormEditar = z.infer<typeof esquemaEditar>
-type FormData   = FormCrear
+type FormData = z.infer<typeof esquemaCrear>
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 

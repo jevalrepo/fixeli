@@ -14,7 +14,11 @@
       "Bash(find /Users/jevaldez/Documents/Desarrollo/Proyectos/app-fixeli/src/components/clinical/ -type f -name *)",
       "Bash(npx tsc:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(gh auth:*)"
     ]
   }
 }
