@@ -94,52 +94,54 @@ export default function DetallePaciente() {
   const condicionesActivas = CONDICIONES_LABELS.filter(c => cm[c.key] === true)
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-4 lg:p-6">
 
       {/* Volver */}
       <button
         onClick={() => navigate('/pacientes')}
-        className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-slate-700 transition-colors mb-5"
+        className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-slate-700 transition-colors mb-4"
       >
         <ArrowLeft size={15} /> Pacientes
       </button>
 
       {/* Cabecera */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 mb-4 flex items-start justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl font-bold shrink-0">
-            {iniciales}
-          </div>
-          <div>
-            <h1 className="text-xl font-bold text-slate-800">
-              {paciente.nombre} {paciente.apellido}
-            </h1>
-            <p className="text-sm text-gray-400 mt-0.5">
-              {edad != null ? `${edad} años` : 'Edad no registrada'}
-              {paciente.fecha_nacimiento && (
-                <> · {format(parseISO(paciente.fecha_nacimiento), "d 'de' MMMM 'de' yyyy", { locale: es })}</>
-              )}
-            </p>
-            <div className="flex items-center gap-4 mt-2 flex-wrap">
-              {paciente.telefono && (
-                <span className="flex items-center gap-1.5 text-sm text-gray-500">
-                  <Phone size={13} className="text-gray-400" /> {paciente.telefono}
-                </span>
-              )}
-              {paciente.email && (
-                <span className="flex items-center gap-1.5 text-sm text-gray-500">
-                  <Mail size={13} className="text-gray-400" /> {paciente.email}
-                </span>
-              )}
+      <div className="bg-white border border-gray-200 rounded-2xl p-4 lg:p-6 mb-4">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3 lg:gap-4 min-w-0">
+            <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg lg:text-xl font-bold shrink-0">
+              {iniciales}
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg lg:text-xl font-bold text-slate-800 truncate">
+                {paciente.nombre} {paciente.apellido}
+              </h1>
+              <p className="text-sm text-gray-400 mt-0.5">
+                {edad != null ? `${edad} años` : 'Edad no registrada'}
+                {paciente.fecha_nacimiento && (
+                  <span className="hidden sm:inline"> · {format(parseISO(paciente.fecha_nacimiento), "d 'de' MMMM 'de' yyyy", { locale: es })}</span>
+                )}
+              </p>
+              <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                {paciente.telefono && (
+                  <span className="flex items-center gap-1.5 text-xs lg:text-sm text-gray-500">
+                    <Phone size={12} className="text-gray-400" /> {paciente.telefono}
+                  </span>
+                )}
+                {paciente.email && (
+                  <span className="hidden sm:flex items-center gap-1.5 text-sm text-gray-500">
+                    <Mail size={12} className="text-gray-400" /> {paciente.email}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
+          <button
+            onClick={() => setModalAbierto(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors shrink-0"
+          >
+            <Pencil size={14} /> Editar
+          </button>
         </div>
-        <button
-          onClick={() => setModalAbierto(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-gray-200 text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors"
-        >
-          <Pencil size={14} /> Editar
-        </button>
       </div>
 
       {/* Tabs */}

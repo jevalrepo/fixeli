@@ -24,7 +24,7 @@ export default function Configuracion() {
   const mesActual = format(new Date(), "MMMM yyyy", { locale: es })
 
   return (
-    <div className="p-6 space-y-8 max-w-5xl">
+    <div className="p-4 lg:p-6 space-y-6 max-w-5xl">
 
       <div>
         <h1 className="text-xl font-bold text-slate-800">Panel</h1>
