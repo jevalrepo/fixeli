@@ -8,7 +8,7 @@ import { useAuth } from '../../hooks/useAuth'
 
 const esquema = z.object({
   nombre_completo: z.string().min(2, 'Mínimo 2 caracteres'),
-  lada:            z.string().min(1).default('+52'),
+  lada:            z.string().min(1),
   telefono:        z.string().optional(),
   nueva_clave:     z.string().optional(),
   confirmar_clave: z.string().optional(),

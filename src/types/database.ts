@@ -220,6 +220,7 @@ export interface Database {
         Row: Perfil
         Insert: Omit<Perfil, 'creado_en'> & { creado_en?: string }
         Update: Partial<Omit<Perfil, 'id'>>
+        Relationships: []
       }
       pacientes: {
         Row: Paciente
@@ -229,6 +230,7 @@ export interface Database {
           actualizado_en?: string
         }
         Update: Partial<Omit<Paciente, 'id'>>
+        Relationships: []
       }
       citas: {
         Row: Cita
@@ -238,6 +240,7 @@ export interface Database {
           actualizado_en?: string
         }
         Update: Partial<Omit<Cita, 'id'>>
+        Relationships: []
       }
       horarios_bloqueados: {
         Row: HorarioBloqueado
@@ -246,6 +249,7 @@ export interface Database {
           creado_en?: string
         }
         Update: Partial<Omit<HorarioBloqueado, 'id'>>
+        Relationships: []
       }
       entradas_odontograma: {
         Row: EntradaOdontograma
@@ -254,6 +258,7 @@ export interface Database {
           registrado_en?: string
         }
         Update: Partial<Omit<EntradaOdontograma, 'id'>>
+        Relationships: []
       }
       notas_clinicas: {
         Row: NotaClinica
@@ -263,6 +268,7 @@ export interface Database {
           actualizado_en?: string
         }
         Update: Partial<Omit<NotaClinica, 'id'>>
+        Relationships: []
       }
       adjuntos: {
         Row: Adjunto
@@ -271,6 +277,7 @@ export interface Database {
           subido_en?: string
         }
         Update: Partial<Omit<Adjunto, 'id'>>
+        Relationships: []
       }
       planes_tratamiento: {
         Row: PlanTratamiento
@@ -280,6 +287,7 @@ export interface Database {
           actualizado_en?: string
         }
         Update: Partial<Omit<PlanTratamiento, 'id'>>
+        Relationships: []
       }
       procedimientos: {
         Row: Procedimiento
@@ -288,6 +296,7 @@ export interface Database {
           creado_en?: string
         }
         Update: Partial<Omit<Procedimiento, 'id'>>
+        Relationships: []
       }
       pagos: {
         Row: Pago
@@ -296,6 +305,7 @@ export interface Database {
           creado_en?: string
         }
         Update: Partial<Omit<Pago, 'id'>>
+        Relationships: []
       }
       conversaciones_whatsapp: {
         Row: ConversacionWhatsapp
@@ -304,10 +314,12 @@ export interface Database {
           creado_en?: string
         }
         Update: Partial<Omit<ConversacionWhatsapp, 'id'>>
+        Relationships: []
       }
     }
-    Views: Record<string, never>
-    Functions: Record<string, never>
-    Enums: Record<string, never>
+    Views: { [_ in never]: never }
+    Functions: { [_ in never]: never }
+    Enums: { [_ in never]: never }
+    CompositeTypes: { [_ in never]: never }
   }
 }

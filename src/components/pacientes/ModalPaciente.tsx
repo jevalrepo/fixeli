@@ -19,24 +19,24 @@ const esquema = z.object({
   recomendado_por:      z.string().optional(),
   ultima_visita_dental: z.string().optional(),
   // Anestesia
-  anestesia_previa:     z.boolean().default(false),
-  reaccion_anestesia:   z.boolean().default(false),
+  anestesia_previa:     z.boolean(),
+  reaccion_anestesia:   z.boolean(),
   tipo_reaccion:        z.string().optional(),
   // Condiciones médicas
   condiciones_medicas: z.object({
-    cardiaca:            z.boolean().default(false),
-    presion:             z.boolean().default(false),
-    diabetes:            z.boolean().default(false),
-    hepatitis:           z.boolean().default(false),
-    tuberculosis:        z.boolean().default(false),
-    nerviosos:           z.boolean().default(false),
-    respiratorio:        z.boolean().default(false),
-    hemofilia:           z.boolean().default(false),
-    hemorragias:         z.boolean().default(false),
+    cardiaca:            z.boolean(),
+    presion:             z.boolean(),
+    diabetes:            z.boolean(),
+    hepatitis:           z.boolean(),
+    tuberculosis:        z.boolean(),
+    nerviosos:           z.boolean(),
+    respiratorio:        z.boolean(),
+    hemofilia:           z.boolean(),
+    hemorragias:         z.boolean(),
     otras:               z.string().optional(),
-    alergia_medicamento: z.boolean().default(false),
-    embarazada:          z.boolean().default(false),
-  }).default({}),
+    alergia_medicamento: z.boolean(),
+    embarazada:          z.boolean(),
+  }),
 })
 
 type FormData = z.infer<typeof esquema>
