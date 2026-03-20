@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { useState, useMemo } from 'react'
+import { Plus, Pencil, Trash2, Search } from 'lucide-react'
 import { toast } from 'sonner'
 import { usePerfiles } from '../hooks/usePerfiles'
 import { ModalDoctor } from '../components/admin/ModalDoctor'
@@ -9,6 +9,17 @@ export default function Usuarios() {
   const { perfiles, cargando, crear, actualizar, eliminar } = usePerfiles()
   const [modalAbierto, setModalAbierto] = useState(false)
   const [doctorEditar, setDoctorEditar] = useState<Perfil | null>(null)
+  const [busqueda, setBusqueda] = useState('')
+
+  const filtrados = useMemo(() => {
+    const q = busqueda.toLowerCase().trim()
+    if (!q) return perfiles
+    return perfiles.filter(p =>
+      p.nombre_completo.toLowerCase().includes(q) ||
+      p.especialidad?.toLowerCase().includes(q) ||
+      p.telefono?.includes(q)
+    )
+  }, [perfiles, busqueda])
 
   function abrirCrear() {
     setDoctorEditar(null)
@@ -81,16 +92,30 @@ export default function Usuarios() {
         </button>
       </div>
 
+      {/* Buscador */}
+      <div className="flex items-center gap-2.5 bg-white border border-gray-200 rounded-xl
+        px-3.5 h-10 focus-within:border-indigo-400 transition-colors">
+        <Search size={15} className="text-gray-400 shrink-0" strokeWidth={2} />
+        <input
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+          placeholder="Buscar por nombre, especialidad…"
+          className="flex-1 text-sm text-slate-700 placeholder-gray-400 outline-none bg-transparent"
+        />
+      </div>
+
       <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
         {cargando ? (
           <div className="p-8 text-center text-sm text-gray-400">Cargando…</div>
-        ) : perfiles.length === 0 ? (
-          <div className="p-8 text-center text-sm text-gray-400">No hay usuarios registrados</div>
+        ) : filtrados.length === 0 ? (
+          <div className="p-8 text-center text-sm text-gray-400">
+            {busqueda ? 'Sin resultados para esa búsqueda' : 'No hay usuarios registrados'}
+          </div>
         ) : (
           <>
             {/* ── Móvil: tarjetas ── */}
             <div className="md:hidden divide-y divide-gray-50">
-              {perfiles.map(p => (
+              {filtrados.map(p => (
                 <div key={p.id} className="flex items-center gap-3 px-4 py-3.5">
                   <div
                     className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0"
@@ -143,7 +168,7 @@ export default function Usuarios() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {perfiles.map(p => (
+                {filtrados.map(p => (
                   <tr key={p.id} className="hover:bg-gray-50/60 transition-colors group">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
