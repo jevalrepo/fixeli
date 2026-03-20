@@ -75,7 +75,7 @@ export default function Usuarios() {
   }
 
   return (
-    <div className="p-4 lg:p-6 space-y-4 lg:space-y-6 max-w-5xl">
+    <div className="p-4 lg:p-6 space-y-4 lg:space-y-6">
 
       <div className="flex items-center justify-between">
         <div>

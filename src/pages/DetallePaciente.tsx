@@ -94,7 +94,7 @@ export default function DetallePaciente() {
   const condicionesActivas = CONDICIONES_LABELS.filter(c => cm[c.key] === true)
 
   return (
-    <div className="max-w-5xl mx-auto p-4 lg:p-6">
+    <div className="p-4 lg:p-6">
 
       {/* Volver */}
       <button

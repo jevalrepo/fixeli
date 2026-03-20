@@ -62,7 +62,7 @@ export default function Pacientes() {
   )
 
   return (
-    <div className="p-4 lg:p-6 max-w-6xl mx-auto">
+    <div className="p-4 lg:p-6">
 
       {/* Encabezado */}
       <div className="flex items-center justify-between mb-4 lg:mb-6">
