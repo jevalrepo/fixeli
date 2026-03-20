@@ -1,22 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Perfil, Rol } from '../types/database'
 
 export function usePerfiles() {
   const [perfiles, setPerfiles] = useState<Perfil[]>([])
   const [cargando, setCargando] = useState(true)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
 
   async function cargar() {
     setCargando(true)
-    const { data } = await supabase
-      .from('perfiles')
-      .select('*')
-      .order('nombre_completo')
-    setPerfiles(data ?? [])
-    setCargando(false)
+    try {
+      const { data } = await supabase
+        .from('perfiles')
+        .select('*')
+        .order('nombre_completo')
+      if (!mounted.current) return
+      setPerfiles(data ?? [])
+    } catch {
+      // error de red u otro — no dejar cargando para siempre
+    } finally {
+      if (mounted.current) setCargando(false)
+    }
   }
 
-  useEffect(() => { cargar() }, [])
+  useEffect(() => { cargar() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function crear(datos: {
     email: string

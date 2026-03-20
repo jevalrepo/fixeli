@@ -1,10 +1,16 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import type { EntradaOdontograma, SuperficieOdontograma, CondicionOdontograma } from '../types/database'
 
 export function useOdontograma(pacienteId: string) {
   const [entradas, setEntradas] = useState<EntradaOdontograma[]>([])
   const [cargando, setCargando] = useState(true)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
 
   const cargar = useCallback(async () => {
     setCargando(true)
@@ -13,10 +19,13 @@ export function useOdontograma(pacienteId: string) {
         .from('entradas_odontograma')
         .select('*')
         .eq('paciente_id', pacienteId)
+      if (!mounted.current) return
       if (error) console.error('Error cargando odontograma:', error)
       setEntradas(data ?? [])
+    } catch {
+      // error de red
     } finally {
-      setCargando(false)
+      if (mounted.current) setCargando(false)
     }
   }, [pacienteId])
 
@@ -26,13 +35,11 @@ export function useOdontograma(pacienteId: string) {
     condicion: CondicionOdontograma,
     notas?: string,
   ) {
-    // Busca si ya existe una entrada para este diente+superficie
     const existente = entradas.find(
       e => e.numero_diente === numeroDiente && e.superficie === superficie,
     )
 
     if (condicion === 'sano') {
-      // "sano" = eliminar la entrada si existe
       if (existente) {
         await supabase.from('entradas_odontograma').delete().eq('id', existente.id)
         setEntradas(prev => prev.filter(e => e.id !== existente.id))
@@ -63,14 +70,12 @@ export function useOdontograma(pacienteId: string) {
     }
   }
 
-  // Devuelve la condición de una superficie específica de un diente
   function condicionDe(numeroDiente: number, superficie: SuperficieOdontograma): CondicionOdontograma {
     return entradas.find(
       e => e.numero_diente === numeroDiente && e.superficie === superficie,
     )?.condicion ?? 'sano'
   }
 
-  // Devuelve si un diente tiene alguna condición (para resaltar visualmente)
   function dieneteTieneCondicion(numeroDiente: number): boolean {
     return entradas.some(e => e.numero_diente === numeroDiente)
   }

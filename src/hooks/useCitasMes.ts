@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { startOfMonth, endOfMonth, addDays } from 'date-fns'
 import { supabase } from '../lib/supabase'
 import type { CitaConRelaciones } from './useCitas'
@@ -7,6 +7,12 @@ import type { Cita } from '../types/database'
 export function useCitasMes(mes: Date) {
   const [citas, setCitas] = useState<CitaConRelaciones[]>([])
   const [cargando, setCargando] = useState(true)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
 
   const cargar = useCallback(async () => {
     setCargando(true)
@@ -25,10 +31,13 @@ export function useCitasMes(mes: Date) {
         .lt('inicia_en', fin.toISOString())
         .order('inicia_en')
 
+      if (!mounted.current) return
       if (error) console.error('Error cargando citas:', error)
       setCitas((data as CitaConRelaciones[]) ?? [])
+    } catch {
+      // error de red
     } finally {
-      setCargando(false)
+      if (mounted.current) setCargando(false)
     }
   }, [mes])
 

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Procedimiento, Pago } from '../types/database'
 
@@ -13,6 +13,12 @@ export interface EntradaEvaluacion {
 export function useHojaEvaluacion(pacienteId: string) {
   const [entradas, setEntradas] = useState<EntradaEvaluacion[]>([])
   const [cargando, setCargando] = useState(true)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
 
   const cargar = useCallback(async () => {
     setCargando(true)
@@ -29,6 +35,8 @@ export function useHojaEvaluacion(pacienteId: string) {
           .eq('paciente_id', pacienteId)
           .order('pagado_en', { ascending: false }),
       ])
+
+      if (!mounted.current) return
 
       const filas: EntradaEvaluacion[] = [
         ...(procs ?? []).map((p: Procedimiento) => ({
@@ -48,8 +56,10 @@ export function useHojaEvaluacion(pacienteId: string) {
       ].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
 
       setEntradas(filas)
+    } catch {
+      // error de red
     } finally {
-      setCargando(false)
+      if (mounted.current) setCargando(false)
     }
   }, [pacienteId])
 

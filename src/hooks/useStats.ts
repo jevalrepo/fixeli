@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { startOfMonth, endOfMonth } from 'date-fns'
 import { supabase } from '../lib/supabase'
 
@@ -17,33 +17,45 @@ export function useStats() {
     citasHoy: 0,
   })
   const [cargando, setCargando] = useState(true)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
 
   useEffect(() => {
     async function cargar() {
-      const hoy   = new Date()
-      const inicio = startOfMonth(hoy)
-      const fin    = endOfMonth(hoy)
-      const inicioHoy = new Date(hoy); inicioHoy.setHours(0, 0, 0, 0)
-      const finHoy    = new Date(hoy); finHoy.setHours(23, 59, 59, 999)
+      try {
+        const hoy   = new Date()
+        const inicio = startOfMonth(hoy)
+        const fin    = endOfMonth(hoy)
+        const inicioHoy = new Date(hoy); inicioHoy.setHours(0, 0, 0, 0)
+        const finHoy    = new Date(hoy); finHoy.setHours(23, 59, 59, 999)
 
-      const [pacientes, citasMes, doctores, citasHoy] = await Promise.all([
-        supabase.from('pacientes').select('id', { count: 'exact', head: true }).eq('activo', true),
-        supabase.from('citas').select('id', { count: 'exact', head: true })
-          .gte('inicia_en', inicio.toISOString())
-          .lte('inicia_en', fin.toISOString()),
-        supabase.from('perfiles').select('id', { count: 'exact', head: true }).eq('activo', true),
-        supabase.from('citas').select('id', { count: 'exact', head: true })
-          .gte('inicia_en', inicioHoy.toISOString())
-          .lte('inicia_en', finHoy.toISOString()),
-      ])
+        const [pacientes, citasMes, doctores, citasHoy] = await Promise.all([
+          supabase.from('pacientes').select('id', { count: 'exact', head: true }).eq('activo', true),
+          supabase.from('citas').select('id', { count: 'exact', head: true })
+            .gte('inicia_en', inicio.toISOString())
+            .lte('inicia_en', fin.toISOString()),
+          supabase.from('perfiles').select('id', { count: 'exact', head: true }).eq('activo', true),
+          supabase.from('citas').select('id', { count: 'exact', head: true })
+            .gte('inicia_en', inicioHoy.toISOString())
+            .lte('inicia_en', finHoy.toISOString()),
+        ])
 
-      setStats({
-        totalPacientes:  pacientes.count  ?? 0,
-        citasMes:        citasMes.count   ?? 0,
-        doctoresActivos: doctores.count   ?? 0,
-        citasHoy:        citasHoy.count   ?? 0,
-      })
-      setCargando(false)
+        if (!mounted.current) return
+        setStats({
+          totalPacientes:  pacientes.count  ?? 0,
+          citasMes:        citasMes.count   ?? 0,
+          doctoresActivos: doctores.count   ?? 0,
+          citasHoy:        citasHoy.count   ?? 0,
+        })
+      } catch {
+        // error de red — los stats quedan en 0
+      } finally {
+        if (mounted.current) setCargando(false)
+      }
     }
     cargar()
   }, [])

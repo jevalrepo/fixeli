@@ -1,10 +1,16 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Paciente } from '../types/database'
 
 export function usePacientes() {
   const [pacientes, setPacientes] = useState<Paciente[]>([])
   const [cargando, setCargando] = useState(true)
+  const mounted = useRef(true)
+
+  useEffect(() => {
+    mounted.current = true
+    return () => { mounted.current = false }
+  }, [])
 
   const cargar = useCallback(async () => {
     setCargando(true)
@@ -14,10 +20,13 @@ export function usePacientes() {
         .select('*')
         .eq('activo', true)
         .order('creado_en', { ascending: false })
+      if (!mounted.current) return
       if (error) console.error('Error cargando pacientes:', error)
       setPacientes(data ?? [])
+    } catch {
+      // error de red
     } finally {
-      setCargando(false)
+      if (mounted.current) setCargando(false)
     }
   }, [])
 
