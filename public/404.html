@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      // Redirige rutas de GitHub Pages al SPA
+      var path = window.location.pathname.replace('/fixeli', '') || '/'
+      sessionStorage.setItem('redirect', path)
+      window.location.replace('/fixeli/')
+    </script>
+  </head>
+  <body></body>
+</html>
