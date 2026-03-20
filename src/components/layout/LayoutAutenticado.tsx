@@ -15,9 +15,7 @@ export function LayoutAutenticado() {
     <div className="flex flex-col h-screen bg-gray-50 overflow-hidden">
 
       {/* Barra superior — logo + usuario */}
-      <div className="lg:block hidden">
-        <NavSuperior />
-      </div>
+      <NavSuperior />
 
       {/* Cuerpo: sidebar + contenido */}
       <div className="flex flex-1 min-h-0">

@@ -1,17 +1,12 @@
 import { NavLink } from 'react-router-dom'
-import {
-  CalendarDays,
-  Users,
-  Banknote,
-  Settings,
-} from 'lucide-react'
+import { CalendarDays, Users, LayoutDashboard, UserCog } from 'lucide-react'
 import { useAuth } from '../../hooks/useAuth'
 
 const navItems = [
-  { ruta: '/agenda',        etiqueta: 'Agenda',      Icono: CalendarDays },
-  { ruta: '/pacientes',     etiqueta: 'Pacientes',    Icono: Users        },
-  { ruta: '/caja',          etiqueta: 'Caja',         Icono: Banknote     },
-  { ruta: '/configuracion', etiqueta: 'Config.',      Icono: Settings, soloAdmin: true },
+  { ruta: '/agenda',        etiqueta: 'Agenda',    Icono: CalendarDays,    soloAdmin: false },
+  { ruta: '/pacientes',     etiqueta: 'Pacientes', Icono: Users,           soloAdmin: false },
+  { ruta: '/configuracion', etiqueta: 'Panel',     Icono: LayoutDashboard, soloAdmin: true  },
+  { ruta: '/usuarios',      etiqueta: 'Usuarios',  Icono: UserCog,         soloAdmin: true  },
 ]
 
 export function BottomNav() {

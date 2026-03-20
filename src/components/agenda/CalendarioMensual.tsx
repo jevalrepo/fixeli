@@ -28,7 +28,7 @@ export function CalendarioMensual({ mes, diaSeleccionado, diasConCitas, onCambia
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 w-72 shrink-0">
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-5 w-full lg:w-72 lg:shrink-0">
 
       {/* Cabecera mes */}
       <div className="flex items-center justify-between mb-4">

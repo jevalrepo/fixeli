@@ -33,18 +33,18 @@ export function NavSuperior() {
 
   return (
     <>
-      <header className="flex items-stretch h-14 bg-white border-b border-gray-100 shrink-0 z-50">
+      <header className="flex items-stretch h-12 lg:h-14 bg-white border-b border-gray-100 shrink-0 z-50">
 
         {/* Logo */}
-        <div className="flex items-center px-5 w-56 shrink-0 border-r border-gray-100">
-          <img src={logoClaro} alt="FIXELI" className="w-[90%] h-auto object-contain" />
+        <div className="flex items-center px-4 lg:px-5 lg:w-56 shrink-0 lg:border-r lg:border-gray-100">
+          <img src={logoClaro} alt="FIXELI" className="h-6 lg:h-auto lg:w-[90%] w-auto object-contain" />
         </div>
 
         {/* Derecha: buscador + usuario */}
-        <div className="flex items-center flex-1 px-5 gap-4">
+        <div className="flex items-center flex-1 px-4 lg:px-5 gap-4">
 
-          {/* Buscador */}
-          <div className="flex items-center gap-2.5 flex-1 max-w-md bg-gray-50 border border-gray-200 rounded-xl px-3.5 h-9 focus-within:border-indigo-400 focus-within:bg-white transition-colors">
+          {/* Buscador — solo desktop */}
+          <div className="hidden lg:flex items-center gap-2.5 flex-1 max-w-md bg-gray-50 border border-gray-200 rounded-xl px-3.5 h-9 focus-within:border-indigo-400 focus-within:bg-white transition-colors">
             <Search size={15} className="text-gray-400 shrink-0" strokeWidth={2} />
             <input
               type="text"
@@ -59,7 +59,7 @@ export function NavSuperior() {
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuAbierto(v => !v)}
-              className="flex items-center gap-2.5 rounded-xl px-2 py-1 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 lg:gap-2.5 rounded-xl px-1.5 lg:px-2 py-1 hover:bg-gray-50 transition-colors"
             >
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
@@ -67,7 +67,7 @@ export function NavSuperior() {
               >
                 {perfil?.nombre_completo?.charAt(0).toUpperCase() ?? '?'}
               </div>
-              <div className="leading-tight min-w-32 text-left">
+              <div className="hidden lg:block leading-tight min-w-32 text-left">
                 <p className="text-sm font-semibold text-slate-800 leading-none">
                   {perfil?.nombre_completo ?? '—'}
                 </p>
@@ -77,7 +77,7 @@ export function NavSuperior() {
               </div>
               <ChevronDown
                 size={14}
-                className={`text-gray-400 transition-transform shrink-0 ${menuAbierto ? 'rotate-180' : ''}`}
+                className={`hidden lg:block text-gray-400 transition-transform shrink-0 ${menuAbierto ? 'rotate-180' : ''}`}
               />
             </button>
 

@@ -27,7 +27,7 @@ export function ListaCitasDia({ dia, citas, onNuevaCita, onClickCita }: Props) {
   const titulo = format(dia, "EEEE, d 'de' MMMM yyyy", { locale: es })
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 bg-white rounded-2xl border border-gray-100 overflow-hidden">
+    <div className="flex flex-col flex-1 min-h-90 lg:min-h-0 bg-white rounded-2xl border border-gray-100 overflow-hidden">
 
       {/* Cabecera */}
       <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">

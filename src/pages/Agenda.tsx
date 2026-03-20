@@ -57,7 +57,7 @@ export default function Agenda() {
   }
 
   return (
-    <div className="flex gap-5 p-6 h-full">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-5 p-4 lg:p-6 lg:h-full">
 
       {/* Mini calendario mensual */}
       <CalendarioMensual
