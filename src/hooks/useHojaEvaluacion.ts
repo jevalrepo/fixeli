@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRecargarAlEnfocar } from './useRecargarAlEnfocar'
 import type { Procedimiento, Pago } from '../types/database'
 
 export interface EntradaEvaluacion {
@@ -64,6 +65,7 @@ export function useHojaEvaluacion(pacienteId: string) {
   }, [pacienteId])
 
   useEffect(() => { cargar() }, [cargar])
+  useRecargarAlEnfocar(cargar)
 
   return { entradas, cargando, recargar: cargar }
 }

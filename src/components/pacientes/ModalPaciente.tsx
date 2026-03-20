@@ -13,6 +13,7 @@ const esquema = z.object({
   nombre:               z.string().min(1, 'Requerido'),
   apellido:             z.string().min(1, 'Requerido'),
   fecha_nacimiento:     z.string().optional(),
+  lada:                 z.string().default('+52'),
   telefono:             z.string().optional(),
   email:                z.string().optional(),
   direccion:            z.string().optional(),
@@ -130,6 +131,13 @@ const CONDICIONES: { key: keyof CondicionesMedicas; label: string }[] = [
 
 // ─── Componente ───────────────────────────────────────────────────────────────
 
+function parseTelefono(tel: string | null | undefined) {
+  if (!tel) return { lada: '+52', numero: '' }
+  const match = tel.trim().match(/^(\+\d{1,4})\s*(.*)$/)
+  if (match) return { lada: match[1], numero: match[2].trim() }
+  return { lada: '+52', numero: tel.trim() }
+}
+
 export function ModalPaciente({ abierto, paciente, onGuardar, onCerrar }: Props) {
   const {
     register,
@@ -146,11 +154,13 @@ export function ModalPaciente({ abierto, paciente, onGuardar, onCerrar }: Props)
   useEffect(() => {
     if (!abierto) return
     const cm = paciente?.condiciones_medicas ?? {}
+    const { lada, numero } = parseTelefono(paciente?.telefono)
     reset({
       nombre:               paciente?.nombre               ?? '',
       apellido:             paciente?.apellido             ?? '',
       fecha_nacimiento:     paciente?.fecha_nacimiento     ?? '',
-      telefono:             paciente?.telefono             ?? '',
+      lada,
+      telefono:             numero,
       email:                paciente?.email                ?? '',
       direccion:            paciente?.direccion            ?? '',
       recomendado_por:      paciente?.recomendado_por      ?? '',
@@ -177,7 +187,12 @@ export function ModalPaciente({ abierto, paciente, onGuardar, onCerrar }: Props)
 
   async function onSubmit(datos: FormData) {
     try {
-      await onGuardar(datos)
+      const lada   = datos.lada?.trim() || '+52'
+      const numTel = datos.telefono?.trim()
+      await onGuardar({
+        ...datos,
+        telefono: numTel ? `${lada} ${numTel}` : undefined,
+      })
       toast.success(paciente ? 'Paciente actualizado' : 'Paciente registrado')
     } catch {
       toast.error('Error al guardar el paciente')
@@ -231,7 +246,19 @@ export function ModalPaciente({ abierto, paciente, onGuardar, onCerrar }: Props)
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <Campo label="Teléfono">
-                      <input {...register('telefono')} className={inputCls} placeholder="+52 55 0000 0000" />
+                      <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-indigo-400 transition-colors bg-white">
+                        <input
+                          {...register('lada')}
+                          type="text"
+                          className="w-12 px-2 py-2 text-sm font-medium text-slate-600 text-center outline-none bg-gray-50 border-r border-gray-200"
+                        />
+                        <input
+                          {...register('telefono')}
+                          type="tel"
+                          placeholder="000 000 0000"
+                          className="flex-1 px-2 py-2 text-sm text-slate-800 outline-none bg-transparent"
+                        />
+                      </div>
                     </Campo>
                     <Campo label="Email" error={errors.email?.message}>
                       <input {...register('email')} className={inputCls} placeholder="correo@ejemplo.com" />

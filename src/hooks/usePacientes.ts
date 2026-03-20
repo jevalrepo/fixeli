@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRecargarAlEnfocar } from './useRecargarAlEnfocar'
 import type { Paciente } from '../types/database'
 
 export function usePacientes() {
@@ -64,6 +65,7 @@ export function usePacientes() {
   }
 
   useEffect(() => { cargar() }, [cargar])
+  useRecargarAlEnfocar(cargar)
 
   return { pacientes, cargando, crear, actualizar, archivar, recargar: cargar }
 }

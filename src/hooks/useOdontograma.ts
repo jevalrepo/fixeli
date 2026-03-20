@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRecargarAlEnfocar } from './useRecargarAlEnfocar'
 import type { EntradaOdontograma, SuperficieOdontograma, CondicionOdontograma } from '../types/database'
 
 export function useOdontograma(pacienteId: string) {
@@ -81,6 +82,7 @@ export function useOdontograma(pacienteId: string) {
   }
 
   useEffect(() => { cargar() }, [cargar])
+  useRecargarAlEnfocar(cargar)
 
   return { entradas, cargando, guardar, condicionDe, dieneteTieneCondicion }
 }

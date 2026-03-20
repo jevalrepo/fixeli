@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { startOfMonth, endOfMonth, addDays } from 'date-fns'
 import { supabase } from '../lib/supabase'
+import { useRecargarAlEnfocar } from './useRecargarAlEnfocar'
 import type { CitaConRelaciones } from './useCitas'
 import type { Cita } from '../types/database'
 
@@ -42,6 +43,7 @@ export function useCitasMes(mes: Date) {
   }, [mes])
 
   useEffect(() => { cargar() }, [cargar])
+  useRecargarAlEnfocar(cargar)
 
   async function crear(datos: {
     paciente_id: string

@@ -5,6 +5,7 @@ import { differenceInYears, parseISO, format } from 'date-fns'
 import { es } from 'date-fns/locale'
 import { usePacientes } from '../hooks/usePacientes'
 import { ModalPaciente } from '../components/pacientes/ModalPaciente'
+import { RegistroPaciente } from '../components/pacientes/RegistroPaciente'
 import type { Paciente } from '../types/database'
 
 export default function Pacientes() {
@@ -12,6 +13,7 @@ export default function Pacientes() {
   const navigate = useNavigate()
 
   const [busqueda, setBusqueda] = useState('')
+  const [registroAbierto, setRegistroAbierto] = useState(false)
   const [modalAbierto, setModalAbierto] = useState(false)
   const [pacienteEditar, setPacienteEditar] = useState<Paciente | null>(null)
 
@@ -25,23 +27,20 @@ export default function Pacientes() {
     )
   }, [pacientes, busqueda])
 
-  function abrirNuevo() {
-    setPacienteEditar(null)
-    setModalAbierto(true)
-  }
-
   function abrirEditar(p: Paciente, e: React.MouseEvent) {
     e.stopPropagation()
     setPacienteEditar(p)
     setModalAbierto(true)
   }
 
-  async function guardar(datos: Partial<Paciente> & { nombre: string; apellido: string }) {
-    if (pacienteEditar) {
-      await actualizar(pacienteEditar.id, datos)
-    } else {
-      await crear(datos as Parameters<typeof crear>[0])
-    }
+  async function guardarNuevo(datos: Parameters<typeof crear>[0]) {
+    await crear(datos)
+    setRegistroAbierto(false)
+  }
+
+  async function guardarEdicion(datos: Partial<Paciente>) {
+    if (!pacienteEditar) return
+    await actualizar(pacienteEditar.id, datos)
     setModalAbierto(false)
   }
 
@@ -54,7 +53,7 @@ export default function Pacientes() {
         {busqueda ? 'Sin resultados para esa búsqueda' : 'Aún no hay pacientes registrados'}
       </p>
       {!busqueda && (
-        <button onClick={abrirNuevo} className="text-sm text-indigo-600 font-medium hover:underline">
+        <button onClick={() => setRegistroAbierto(true)} className="text-sm text-indigo-600 font-medium hover:underline">
           Registrar primer paciente
         </button>
       )}
@@ -73,7 +72,7 @@ export default function Pacientes() {
           </p>
         </div>
         <button
-          onClick={abrirNuevo}
+          onClick={() => setRegistroAbierto(true)}
           className="flex items-center gap-1.5 lg:gap-2 bg-indigo-600 hover:bg-indigo-700
             text-white px-3 lg:px-4 py-2 rounded-xl text-sm font-medium transition-colors"
         >
@@ -189,10 +188,16 @@ export default function Pacientes() {
         )}
       </div>
 
+      <RegistroPaciente
+        abierto={registroAbierto}
+        onGuardar={guardarNuevo}
+        onCerrar={() => setRegistroAbierto(false)}
+      />
+
       <ModalPaciente
         abierto={modalAbierto}
         paciente={pacienteEditar}
-        onGuardar={guardar}
+        onGuardar={guardarEdicion as never}
         onCerrar={() => setModalAbierto(false)}
       />
     </div>

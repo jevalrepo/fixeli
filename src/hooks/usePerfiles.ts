@@ -1,5 +1,6 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
+import { useRecargarAlEnfocar } from './useRecargarAlEnfocar'
 import type { Perfil, Rol } from '../types/database'
 
 export function usePerfiles() {
@@ -12,7 +13,7 @@ export function usePerfiles() {
     return () => { mounted.current = false }
   }, [])
 
-  async function cargar() {
+  const cargar = useCallback(async () => {
     setCargando(true)
     try {
       const { data } = await supabase
@@ -26,9 +27,10 @@ export function usePerfiles() {
     } finally {
       if (mounted.current) setCargando(false)
     }
-  }
+  }, [])
 
-  useEffect(() => { cargar() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { cargar() }, [cargar])
+  useRecargarAlEnfocar(cargar)
 
   async function crear(datos: {
     email: string
