@@ -190,12 +190,11 @@ export function Odontograma({ pacienteId }: { pacienteId: string }) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-6">
-      <div className="flex gap-20 items-start w-fit">
+    <div className="bg-white border border-gray-200 rounded-2xl p-4 lg:p-6">
+      <div className="flex flex-col lg:flex-row lg:gap-16 lg:items-start">
 
-      {/* ── Columna 1: Odontograma ── */}
-      <div className="overflow-x-auto shrink-0">
-        {/* Label Derecha/Izquierda: mismo ancho que el SVG */}
+      {/* ── Odontograma ── */}
+      <div className="overflow-x-auto">
         <div
           className="flex items-center gap-2 mb-1 text-[10px] text-gray-400 font-medium"
           style={{ width: svgW }}
@@ -237,20 +236,22 @@ export function Odontograma({ pacienteId }: { pacienteId: string }) {
         </svg>
       </div>
 
-      {/* ── Columna 2: Leyenda ── */}
-      <div className="flex flex-col gap-2 shrink-0 pt-6">
-          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
-            Referencias
-          </p>
+      {/* ── Leyenda ── */}
+      <div className="shrink-0 pt-4 lg:pt-6">
+        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">
+          Referencias
+        </p>
+        <div className="grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-1.5 lg:gap-y-2">
           {CONDICIONES.filter(c => c.value !== 'sano').map(c => (
             <span key={c.value} className="flex items-center gap-2 text-xs text-gray-600">
               <span className="w-3.5 h-3.5 rounded border border-gray-200 shrink-0" style={{ backgroundColor: c.color }} />
               {c.label}
             </span>
           ))}
+        </div>
       </div>
 
-      </div>{/* fin grid */}
+      </div>
 
       {/* Popover de condiciones — fixed para evitar problemas de posicionamiento */}
       {seleccion && (
