@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { useAuth } from '../hooks/useAuth'
-import { LogoFixeli } from '../components/ui/LogoFixeli'
+import logoFixeli from '../assets/logo-claro-2.png'
 
 const esquemaLogin = z.object({
   email: z
@@ -56,11 +56,7 @@ export default function Login() {
 
         {/* Logo / encabezado */}
         <div className="flex flex-col items-center mb-8">
-          <LogoFixeli
-            variant="oscuro"
-            mostrarSubtitulo
-            className="h-16 w-auto"
-          />
+          <img src={logoFixeli} alt="Fixeli" className="h-20 w-auto" />
         </div>
 
         {/* Tarjeta de login */}
