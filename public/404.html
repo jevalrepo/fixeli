@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <script>
       // Redirige rutas de GitHub Pages al SPA
-      var path = window.location.pathname.replace('/fixeli', '') || '/'
+      var path = window.location.pathname
       sessionStorage.setItem('redirect', path)
       window.location.replace('/fixeli/')
     </script>
