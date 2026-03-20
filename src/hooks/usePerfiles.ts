@@ -28,7 +28,10 @@ export function usePerfiles() {
     color: string
     porcentaje_comision: number
   }) {
-    // Crea el usuario de auth
+    // Guarda la sesión activa del admin antes de crear el nuevo usuario
+    const { data: { session: sesionAdmin } } = await supabase.auth.getSession()
+
+    // Crea el usuario de auth (signUp reemplaza la sesión activa automáticamente)
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: datos.email,
       password: datos.password,
@@ -51,6 +54,14 @@ export function usePerfiles() {
         activo:              true,
       })
     if (perfilError) throw perfilError
+
+    // Restaura la sesión del admin para que no se loguee como el usuario creado
+    if (sesionAdmin) {
+      await supabase.auth.setSession({
+        access_token:  sesionAdmin.access_token,
+        refresh_token: sesionAdmin.refresh_token,
+      })
+    }
 
     await cargar()
   }
